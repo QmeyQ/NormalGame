@@ -49,15 +49,16 @@ export default class Main {
    * 帧数取模定义成生成的频率
    */
   enemyGenerate() {
-    if (databus.frame % 30 === 0) {
+    //if (databus.frame % 30 === 0) {
       const enemy = databus.pool.getItemByClass('enemy', Enemy)
-      enemy.init(6)
+      enemy.init(1)
       databus.enemys.push(enemy)
-    }
+    //}
   }
 
   // 全局碰撞检测
   collisionDetection() {
+    return ;
     const that = this
 
     databus.bullets.forEach((bullet) => {
@@ -155,10 +156,10 @@ export default class Main {
 
     this.collisionDetection()
 
-    if (databus.frame % 20 === 0) {
+    //if (databus.frame % 1 === 0) {
       this.player.shoot()
       this.music.playShoot()
-    }
+    //}
   }
 
   // 实现游戏帧循环

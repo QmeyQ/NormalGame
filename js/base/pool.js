@@ -18,7 +18,7 @@ export default class Pool {
    * 获取对应的对象池
    */
   getPoolBySign(name) {
-    return this[__.poolDic][name] || (this[__.poolDic][name] = [])
+    return [];//this[__.poolDic][name] || (this[__.poolDic][name] = [])
   }
 
   /**

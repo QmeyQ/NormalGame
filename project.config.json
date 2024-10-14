@@ -39,7 +39,7 @@
     "ignoreUploadUnusedFiles": true
   },
   "compileType": "game",
-  "libVersion": "2.20.1",
+  "libVersion": "2.25.4",
   "appid": "wx48511d5cec9a325a",
   "projectname": "Normal",
   "packOptions": {

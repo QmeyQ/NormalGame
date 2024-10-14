@@ -111,7 +111,7 @@ export default class Player extends Sprite {
     bullet.init(
       this.x + this.width / 2 - bullet.width / 2,
       this.y - 10,
-      10
+      1
     )
 
     databus.bullets.push(bullet)
