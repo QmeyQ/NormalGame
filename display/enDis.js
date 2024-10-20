@@ -22,7 +22,6 @@ export const EnDis = {
     img.src = path;
     img.onload = function () {
       EnDis.ctx.drawImage(img, 0, 0, img.width, img.height);
-      console.log(EnDis.oD = EnDis.ctx.getImageData(0, 0, img.width, img.height).data)
       EnDis.rD = []
       EnDis.rD[-1] = [img.width >> 8 & 0xff, img.width & 0xff, img.height >> 8 & 0xff, img.height & 0xff]
       var j = -1;
@@ -126,44 +125,8 @@ export const EnDis = {
          
       }
       EnDis.LF = 1;
-
-
-      wx.request({
-        url: 'http://localhost:3000/upload',
-        method: 'POST',
-        header: {
-          'content-type': 'application/json'
-        },
-        data: EnDis.rD,
-        success(res) {
-          if (res.statusCode === 200) {
-            console.log('上传成功');
-            console.log(res.data); // 这里假设服务器返回了JSON格式的数据
-          } else {
-            console.error('上传失败');
-          }
-        },
-        fail(err) {
-          console.error('请求失败', err);
-        }
-      });
-
-      console.log(EnDis.rD)
-      console.log(EnDis.oD.length)
       //wx.requestFileSystemAccess;
-      wx.setStorage({
-        key: 'keyName', // 存储的 key 名称
-        data: EnDis.rD, // 要存储的数据
-        success(res) {
-          console.log('Data stored successfully');
-        },
-        fail(err) {
-          console.error('Failed to store data:', err);
-        },
-        complete(res) {
-          // 存储完成后的回调函数
-        }
-      });
+    
     };
 
     return EnDis.rD;
@@ -229,26 +192,11 @@ export const EnDis = {
           }
 
         } else {
-          console.log(l + "/////" + i);
-          console.log(this.mo + "/////" + datas[l][i]);
-          console.log(datas[l]);
           i++;
         }
       }
 
-      if(this.rD.length > (l + 1) * wid * 4){
-        if(yyy > 0){
-          console.log(l + "/////" + wid);
-          console.log(this.mo + "/////" + (this.rD.length - (l + 1) * wid * 4));
-          
-          console.log(datas[l]);
-          yyy --;
-          }
-      }
-
     }
-    console.log(EnDis.rD.length + "////" + 4 * wid * hei)
-    console.log(EnDis.rD)
     const imageData = EnDis.ctx.createImageData(wid, hei);
     imageData.data.set(EnDis.rD);
     EnDis.ctx.putImageData(imageData, 0, 108);
