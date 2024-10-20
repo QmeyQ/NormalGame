@@ -8,7 +8,7 @@ export default class Sprite {
 
     this.width = width
     this.height = height
-
+    
     this.x = x
     this.y = y
 

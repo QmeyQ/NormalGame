@@ -165,7 +165,6 @@ export default class Main {
   // 实现游戏帧循环
   loop() {
     databus.frame++
-
     this.update()
     this.render()
 

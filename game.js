@@ -1,6 +1,9 @@
 import './js/libs/weapp-adapter'
-import './js/libs/symbol'
+var symbol = require( './js/libs/symbol')
 
-import Main from './js/main'
+import Main from './js/main.js'
+const { Display } = require('./display/display.js')
 
-new Main()
+Display.init();
+
+//new Main()
