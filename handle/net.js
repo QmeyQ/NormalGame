@@ -1,29 +1,16 @@
 const {
   File
 } = require('./file')
-const {
-  Res
-} = require('./res')
+
+import { Res } from "./res";
 
 export const Net = {
   flag: false,
   fileList: [],
   down(id) {
-    if (this.flag!=true) {
-      this.flag = true;
-      if (File.preStore([Res.teimg.na], File.mFlag)) {
-        console.log("pre ok:" + File.getData(Res.teimg.na))
-
-        if (File.getData(Res.teimg.na) != null) {
-          console.log("读取内存：" + res.tempFilePath)
-          this.fileList.push(res.tempFilePath);
-          Net.flag = false;
-        } else {
-          console.log("download File:" + File.getData(Res.teimg.na))
           wx.downloadFile({
-            url: id.va,
+            url: Res.getRes(id),
             success: (res) => {
-
               this.fileList.push(res.tempFilePath);
               File.store(id.na, res.tempFilePath);
               // 可以在这里将临时文件路径保存到持久化存储中
@@ -36,12 +23,6 @@ export const Net = {
               Net.flag = false;
             },
           });
-        }
-      }else{
-        console.log("pre fail")
-        Net.flag = false;
-      }
-    }
   },
   other() {
     wx.request({

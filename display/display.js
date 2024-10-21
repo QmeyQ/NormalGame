@@ -1,7 +1,6 @@
 //import '../js/libs/weapp-adapter'
 const {EnDis} = require('./enDis.js')
 
-const fs = wx.getFileSystemManager();
 
 export const Display = {
   enD: {

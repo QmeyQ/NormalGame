@@ -1,3 +1,6 @@
+
+const fs = wx.getFileSystemManager();
+
 export const File = {
   mFlag: 0,
   sData: [
@@ -6,6 +9,24 @@ export const File = {
   dataList: [
     [],
   ],
+  readFile(path, suc){
+    fs.readFile({
+      filePath: path,
+      encoding: '', // 设置编码方式
+      success: (res) => {
+        console.log('读取的文件：' + path);
+        suc(res.data, path);
+      },
+      fail: (error) => {
+        if (error.errCode === -2147024894) {
+          console.error(`文件不存在：${tempFilePath}`);
+        } else {
+          console.error(`读取文件错误：${error.errMsg}`);
+        }
+      },
+    });
+  }
+  ,
   store(keyName, datas) {
     wx.setStorage({
       key: keyName, // 存储的 key 名称
@@ -19,6 +40,23 @@ export const File = {
         console.log(res)
       }
     });
+  },
+  delStore(na, flag){
+    if (flag == undefined)
+    flag = 0;
+    wx.removeStorage({
+      key: na,
+      success: function (res) {
+        console.log(`已删除 key: ${key}`);
+      },
+      fail: function (error) {
+        console.error(`删除 key: ${key} 失败：${error.errMsg}`);
+      },
+      complete: function () {
+        console.log('删除 key 操作完成');
+      }
+    });
+    this.deData(na, flag);
   },
   /*** 预加载的键值对 */
   preStore(datas, layout) {
@@ -45,17 +83,17 @@ export const File = {
     }
     tmp = [];
     for (var j = 0; j < datas.length; j++) {
-      w: while (true) {
-        for (var i = 0; i < res.length; i++) {
-          if (datas[j] == res[i])
-            break w;
+      for (var i = 0; i < res.length; i++) {
+        if (datas[j] == res[i]){
+          i += 10;
+          break;
         }
-        tmp.push(datas[j]);
       }
+      if (i >= res.length)
+        tmp.push(datas[j]);
     }
-    //console.log("pre List:");
-    //console.log(res)
-   // console.log(tmp)
+    console.log("pre List:");
+
     for (var i = 0; i < tmp.length; i++) {
       const na = tmp[i];
       wx.getStorage({
@@ -66,6 +104,7 @@ export const File = {
           } else {
             console.log(res);
             console.log('获取的值为：', res.data);
+            File.putData(na, res.data);
           }
         },
         fail(err) {
@@ -83,6 +122,7 @@ export const File = {
 
 
     if (result > 0) {
+      console.log(result)
       return false;
     } else {
 
@@ -90,15 +130,30 @@ export const File = {
     }
   },
   getData(value, flag) {
+    if(flag == undefined)
+    flag = 0;
     if (this.dataList[flag] == undefined) {
-      return undefined;
+      return ;
     }
     for (var i = 0; i < this.dataList[flag].length; i++) {
-      if (this.dataList[flag].length == value) {
+      if (this.dataList[flag][i] == value) {
         return this.sData[flag][i];
       }
     }
-    return undefined;
+    return ;
+  },
+  deData(na, flag){
+    if(flag == undefined)
+    flag = 0;
+    var tmp, tmp1;
+    for(var i = 0; i < this.dataList[flag].length; i++){
+      tmp = this.dataList[flag].shift();
+      tmp1 = this.sData[flag].shift();
+      if(tmp != na){
+        this.dataList[flag].push(tmp);
+        this.sData[flag].push(tmp1);
+      }
+    }
   },
   putData(na, data, flag) {
     if (flag == undefined) {

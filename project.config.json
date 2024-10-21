@@ -42,14 +42,7 @@
   "libVersion": "2.25.4",
   "appid": "wx48511d5cec9a325a",
   "projectname": "Normal",
-  "packOptions": {
-    "ignore": [
-      {
-        "type": "file",
-        "value": ".eslintrc.js"
-      }
-    ]
-  },
+ 
   "condition": {
     "search": {
       "list": []

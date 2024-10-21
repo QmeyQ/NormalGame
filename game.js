@@ -9,14 +9,12 @@ const { Display } = require('./display/display.js')
 
 Display.init();
 
-
 const img = new Image();
-Net.down(Res.teimg);
 
 setInterval(function () {
 
   if(Net.fileList.length < 2){
-    Net.down(Res.teimg);
+    Res.downRes([Res.resList[0][0]]);
   }
 
   if(Net.fileList.length > 0){
