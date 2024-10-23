@@ -7,22 +7,25 @@ import { Res } from "./res";
 export const Net = {
   flag: false,
   fileList: [],
-  down(id) {
+  down(link, suc) {
+    try{
           wx.downloadFile({
-            url: Res.getRes(id),
+            url: link,
             success: (res) => {
+              console.info("down sucess:" + res.tempFilePath);
               this.fileList.push(res.tempFilePath);
-              File.store(id.na, res.tempFilePath);
               // 可以在这里将临时文件路径保存到持久化存储中
               // 例如：wx.saveFile
-              Net.flag = false;
-              console.info("down sucess:" + res.tempFilePath);
+              if(suc !== undefined)
+              suc(res.tempFilePath);
             },
             fail: (err) => {
-              console.error('下载失败：', err);
-              Net.flag = false;
+              console.error(url + '下载失败：', err);
             },
           });
+        }catch(e){
+          console.log(e);
+        }
   },
   other() {
     wx.request({

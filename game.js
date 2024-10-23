@@ -1,4 +1,5 @@
 
+import { File } from './handle/file'
 import { Res } from './handle/res'
 import './js/libs/weapp-adapter'
 var symbol = require( './js/libs/symbol')
@@ -13,8 +14,10 @@ const img = new Image();
 
 setInterval(function () {
 
+  File.getVol();
   if(Net.fileList.length < 2){
-    Res.downRes([Res.resList[0][0]]);
+    Res.downRes([Res.resList[0][0] , 'th', 'th1', 'th2', 'th3', 'th4']);
+    //File.getVol();
   }
 
   if(Net.fileList.length > 0){
@@ -22,6 +25,6 @@ setInterval(function () {
     Display.ctx.drawImage(img, 200,200, 100, 100);
   }
   
-}, 1000, 'maintain display');
+}, 2000, 'maintain display');
 
 //new Main()
