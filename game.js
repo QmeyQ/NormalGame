@@ -1,30 +1,46 @@
+import Display  from './display/display'
+import EnDis from './display/enDis'
+import Net from './handle/net'
+import Res from './handle/res'
 
-import { File } from './handle/file'
-import { Res } from './handle/res'
-import './js/libs/weapp-adapter'
-var symbol = require( './js/libs/symbol')
-const {Net} = require('./handle/net')
+//Net.id = '#' + ~~(Math.random() * 100)
+var mdata = [[0, 2, 0, 10, 0xe0, 2, 0xe3, 2, 4, 255, 244, 233, 255, 244, 222, 0xe0, 6],[0xe0, 2, 0xe3, 2, 4, 255, 244, 233, 255, 244, 222, 0xe0, 6]]
+var data = [[0, 2, 0, 10, 0xe0, 2, 0xe3, 2, 4, 255, 244, 233, 255, 244, 222, 0xe0, 6],[0xe0, 2, 0xe3, 2, 4, 255, 244, 233, 255, 244, 222, 0xe0, 6]]
 
-import Main from './js/main.js'
-const { Display } = require('./display/display.js')
+new Res().url("https://agc-storage-drcn.platform.dbankcloud.cn/v0/sgf-rhq1y/res.json?token=b239b799-d211-4458-ad72-640e985090e4");
+
+console.log(EnDis.deData(mdata[0], 1))
+Net.login(function(res){
+  console.log(res)
+});
+//console.log(EnDis.putData(mdata, data));
 
 Display.init();
 
-const img = new Image();
 
-setInterval(function () {
 
-  File.getVol();
-  if(Net.fileList.length < 2){
-    Res.downRes([Res.resList[0][0] , 'th', 'th1', 'th2', 'th3', 'th4']);
-    //File.getVol();
-  }
 
-  if(Net.fileList.length > 0){
-    img.src = Net.fileList[0]
-    Display.ctx.drawImage(img, 200,200, 100, 100);
-  }
-  
-}, 2000, 'maintain display');
 
-//new Main()
+/*Net.udpSend(Net.id + ":" + Net.ip + ":" + Net.port, "47.119.120.119", 50132, (res)=>{
+    var mes = new Int8Array(res.message);
+    /**数组转字符串 
+   console.log(mes)
+    if(mes[0]==35){
+        var str = "";
+        for (var i = 0; i < mes.length; i++) {
+            str += String.fromCharCode(mes[i]);
+        }
+        Net.Uip(str)
+        /**打印ip和端口 
+        //console.log(res.remoteInfo.address, res.remoteInfo.port)
+        //console.log()
+    }
+});
+Net.udpLoop();*/
+
+
+
+
+
+
+

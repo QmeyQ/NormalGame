@@ -1,13 +1,34 @@
-import {
-  File
-} from "./file";
-import {
-  Net
-} from "./net";
 
-var tD, path;
-export const Res = {
-  downRes(datas, flag) {
+
+export default class Res {
+  tD;
+  path;
+  item;
+  Net = require("./net");
+  File = require("./file");
+  /**
+   * 
+   * @param {*解析资源文件} files 
+   */
+  constructor() {
+    //return this;
+  }
+
+
+
+  /**从链接文件初始资源目录*/
+  url(url) {
+    this.Net.default.down(url, function (res) {
+      console.log(res)
+      this.File.default.readFile(res.tempFilePath, function (res) {
+        console.log(res);
+        console.log(JSON.parse(new Uint8Array(res).toString()));
+      })
+    }.bind(this))//下载资源对照文件
+    return this;
+  }
+
+  downRes(RO, flag) {
     if (flag == undefined)
       flag = 0;
     if (datas == undefined)
@@ -17,15 +38,18 @@ export const Res = {
       for (var i = 0; i < datas.length; i++) {
         tD = File.getData(datas[i]);
         if (tD !== null) {
-          const tmp = File.readFile(tD)
-          if(tmp != undefined && tmp.byteLength > 0){
-            console.log(datas[i] + "文件有效：" + tmp.byteLength) //(datas[0] << 8 & datas[1]) + "/" + (datas[2] << 8 & datas[3]))
-            Net.fileList.push(datas[i]);
-          } else {
-            //console.log("文件wu效：");
-            //console.log(datas)
-            File.delStore(tD);
-          }
+          File.readFile(tD, function (datas, path) {
+            if (path == undefined)
+              return
+            if (datas != undefined && datas.byteLength > 1) {
+              Net.fileList.push(path);
+              Display.drawing(EnDis.initData(new Uint8Array(datas)));
+            } else {
+              console.log("文件wu效：");
+              console.log(datas)
+              File.delStore(tD);
+            }
+          })
 
         } else {
           console.log("download:===>" + datas[i] + ":" + Res.getRes(datas[i]));
@@ -41,22 +65,12 @@ export const Res = {
     }
 
     return false;
-  },
+  }
   getRes(name) {
     for (var i = 0; i < this.resList.length; i++) {
       if (this.resList[i][0] == name)
         return this.resList[i][1];
     }
     return null;
-  },
-  resList: [
-    ['tsimg', 'https://cdn.pixabay.com/photo/2018/01/14/23/12/nature-3082832_1280.jpg'],
-    ['th1', 'http://localhost/EndNoteX9_CHS.zip'],
-    ['th2', 'http://localhost/EndNoteX9_CHS1.zip'],
-    ['th3', 'http://localhost/EndNoteX9_CHS12.zip'],
-    ['th4', 'http://localhost/EndNoteX9_CHS13.zip'],
-    ['th', 'http://localhost/EndNoteX9_CHS14.zip']
-  ],
-
-
+  }
 }

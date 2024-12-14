@@ -1,6 +1,17 @@
+
+
+//const fs = require('fs')
 const fs = wx.getFileSystemManager();
 
-export const File = {
+const File = {
+  fileTime:0,
+  isE: false,
+  fileRun: undefined,
+  fileList: [],
+  fileDatas: [],
+  fileNa:[],
+  sucList: [],
+  volInd:0,
   vol: -1,
   mFlag: 0,
   sData: [
@@ -15,13 +26,70 @@ export const File = {
    * @param {*} suc(data, path)
    */
   readFile(path, suc) {
-    try {
-        return fs.readFileSync(path);
-    } catch (e) {
-      console.log('readfile:' + path, e);
-      return ;
+    if (path == undefined)
+      return;
+    this.fileList.push(path);
+    this.sucList.push(suc);
+    if (File.fileRun == undefined) {
+      File.isE = false;
+      File.fileRun = setTimeout(function () {
+        /*if (File.fileList.length < 1) {
+          clearInterval(this.DRun);
+          File.fileRun = undefined;
+        } else {*/
+          if (File.fileList.length < 1 && !File.isE) {
+            clearInterval(File.fileRun);
+            File.fileRun = undefined;
+            console.log("clear file")
+            return;
+          }
+        if (!File.isE) {
+          File.isE = true;
+          try {
+            fs.readFile({
+              filePath: File.fileList[0],
+              encoding: '', // 设置编码方式
+              success(res) {
+                File.isE = false;
+                console.log(File.fileList.length + '读取的文件：' + path);
+                File.fileTime = 0;
+                let xxx = File.sucList.shift()
+                if(File.fileList.length == 1){
+                  File.fileList = [];
+                  File.sucList = [];
+                }else{
+                File.fileList.shift();
+                }
+                if (xxx != undefined)
+                  xxx(res.data, path);
+              },
+              fail(error) {
+                File.isE = false;
+                File.fileTime = 0;
+                if (error.errCode === -2147024894) {
+                  console.error(`文件不存在：${tempFilePath}`);
+                } else {
+                  console.error(`读取文件错误：${error.errMsg}`);
+                }
+                File.fileList.shift();
+                File.sucList.shift()
+              },
+            });
+          } catch (e) {
+            console.log(e)
+          }
+        }
+        if(File.fileTime++ > 100){
+          File.fileTime = 0;
+          File.isE = false;
+        }
+        
+        //}
+      }, 1);
     }
+
   },
+  /** setStorage（ name， datas） */
   store(keyName, datas) {
     wx.setStorage({
       key: keyName, // 存储的 key 名称
@@ -36,6 +104,7 @@ export const File = {
       }
     });
   },
+  /** delete store （name， default 0 layout） */
   delStore(na, flag) {
     if (flag == undefined)
       flag = 0;
@@ -53,7 +122,7 @@ export const File = {
     });
     this.deData(na, flag);
   },
-  /*** 预加载的键值对 */
+  /*** 预加载的键值对 prestrain sotrage（datas， layout -0）*/
   preStore(datas, layout) {
     if (layout == undefined)
       layout = 0;
@@ -110,7 +179,7 @@ export const File = {
       return true;
     }
   },
-  /** */
+  /** get storage prestrain datas（name， layout - 0）*/
   getData(value, flag) {
     if (flag == undefined)
       flag = 0;
@@ -124,7 +193,10 @@ export const File = {
     }
     return;
   },
+  /** delete data（name， layout -0） */
   deData(na, flag) {
+    if(na == undefined)
+    return;
     if (flag == undefined)
       flag = 0;
     var tmp, tmp1;
@@ -137,6 +209,7 @@ export const File = {
       }
     }
   },
+  /** put data（name，data， layout -0） */
   putData(na, data, flag) {
     if (flag == undefined) {
       flag = 0;
@@ -160,30 +233,36 @@ export const File = {
     return true;
   },
   getVol() {
-
-    File.vol = 0;
     wx.getStorageInfo({
       success(res) {
         if (File.preStore(res.keys)) {
+          File.volInd = res.keys.length;
+          File.vol = 0;
           for (var i = 0; i < res.keys.length; i++) {
             if (File.getData(res.keys[i]) == null)
               break;
             File.readFile(File.getData(res.keys[i]), function (data, p) {
-              //console.log(File.getData(res.keys[i]));
               if (data == undefined)
                 return;
-              File.vol += data.byteLength;
+                if(File.volInd > 0){
+                  File.vol += data.byteLength;
+                  File.volInd -- ;
+                  console.log(File.vol)
+                }
             });
           }
         }
-        console.log(File.vol)
       },
       fail(error) {
         console.log("store:")
         console.error(error);
       }
     });
-
     return this.vol
+  },
+  readDir(path){
+    return fs.readdirSync(path);
   }
 }
+
+export default File;

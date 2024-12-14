@@ -9,7 +9,7 @@
     "minified": true,
     "newFeature": true,
     "coverView": true,
-    "nodeModules": false,
+    "nodeModules": true,
     "autoAudits": false,
     "showShadowRootInWxmlPanel": true,
     "scopeDataCheck": false,
@@ -34,28 +34,22 @@
     "packNpmRelationList": [],
     "minifyWXSS": true,
     "disableUseStrict": false,
+    "useStaticServer": false,
     "showES6CompileOption": false,
     "useCompilerPlugins": false,
     "ignoreUploadUnusedFiles": true
   },
   "compileType": "game",
-  "libVersion": "2.25.4",
+  "libVersion": "3.6.5",
   "appid": "wx48511d5cec9a325a",
   "projectname": "Normal",
- 
-  "condition": {
-    "search": {
-      "list": []
-    },
-    "conversation": {
-      "list": []
-    },
-    "game": {
-      "currentL": -1,
-      "list": []
-    },
-    "miniprogram": {
-      "list": []
-    }
+  "condition": {},
+  "packOptions": {
+    "ignore": [],
+    "include": []
+  },
+  "editorSetting": {
+    "tabIndent": "insertSpaces",
+    "tabSize": 2
   }
 }
