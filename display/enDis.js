@@ -27,6 +27,11 @@ const EnDis = {
   oIndex: 0,
   sInd: 0,
   dInd: 0,
+
+  bToS(byteArray) {
+    return String.fromCharCode.apply(null, byteArray);
+  }
+  ,
   /**
    * 将编译的数据绘制在第一个编译数据中,对数据的rgba值进行叠加运算
    * 编译数据的格式:4字节宽高,[0xe0,长度]代表透明像素及个数,[0xe1,长度,r,g,b,a,r,g,b,a...]代表单个像素和个数,[0xe2,长度,r,g,b,a]代表重复像素及个数,
